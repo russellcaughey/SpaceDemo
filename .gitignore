@@ -1,0 +1,10 @@
+dist
+*.bundle
+.js
+
+node_modules
+
+.log
+
+.metadata
+.DS_Store
