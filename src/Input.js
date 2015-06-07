@@ -13,6 +13,7 @@ function Input(node){
     this.node.requestUpdate(this.id);
 }
 
+// Key down
 var onKeyDown = function(event, node){
     for(var value in KEYS){
         if(event.which == KEYS[value]){
@@ -21,6 +22,7 @@ var onKeyDown = function(event, node){
     }
 }
 
+// Key up
 var onKeyUp = function(event, node){
     for(var value in KEYS){
         if(event.which == KEYS[value]){
@@ -29,32 +31,7 @@ var onKeyUp = function(event, node){
     }
 }
 
-//Input.prototype.onKeyDown = function(event, node) {
-//    console.log("Test in Input::KEYDOWN::"+this.node);
-//    for(var value in KEYS){
-//        if(event.which == KEYS[value]){
-//            this.node.emit('keydown', value);
-//        }
-//    }
-//};
-//
-//Input.prototype.onKeyUp = function(event) {
-//    console.log("Test in Input::KEYUP::"+this.node);
-//    for(var value in KEYS){
-//        if(event.which == KEYS[value]){
-//            this.node.emit('keyup', value);
-//        }
-//    }
-//};
-
-//Input.prototype = Object.create(Node.prototype);
-//Input.prototype.constructor = Node;
-
-//Input.prototype.onUpdate = function onUpdate(time){
-//    console.log("Test in Input::"+this.node);
-//    this.node.requestUpdateOnNextTick(this.id);
-//};
-
+// Key codes
 var KEYS = {
     BACKSPACE: 8,
     TAB:       9,
