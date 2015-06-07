@@ -1,16 +1,5 @@
 var Input = require('./Input');
 
-//var upHeld;
-//var upReleased;
-//var downHeld;
-//var downReleased;
-//var leftHeld = "FALSE";
-//var leftReleased;
-//var rightHeld;
-//var rightReleased;
-//var spaceHeld;
-//var spaceReleased;
-
 function InputController(node){
     // Get a copy of node
     this.node = node;
