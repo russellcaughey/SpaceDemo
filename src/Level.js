@@ -7,6 +7,7 @@ var Size = require('famous/components/size');
 var PointLight = require('famous/webgl-renderables/lights/PointLight');
 var Color = require('famous/utilities/Color');
 
+var ShipController = require('./ShipController'); // Temporary reference
 var currentScene;
 var size;
 var windowSizeX = window.innerWidth;
@@ -36,18 +37,8 @@ Level.prototype.init = function() {
     size.onSizeChange = function(size){
         windowSizeX = size[0];
         windowSizeY = size[1];
-        console.log("Level :: Window size changed to " + windowSizeX +"x"+windowSizeY);
+        ShipController.prototype.setBounds(windowSizeX);//temp
     }
-}
-
-
-
-Level.prototype.onSizeChange = function(size){
-    console.log("Level::On size change in level");
-}
-
-Level.prototype.onParentSizeChange = function(size){
-    console.log("Level::parent size changed");
 }
 
 // Level update

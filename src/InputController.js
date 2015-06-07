@@ -1,23 +1,34 @@
-var FamousEngine = require('famous/core/FamousEngine');
 var Input = require('./Input');
 
-var input;
+//var upHeld;
+//var upReleased;
+//var downHeld;
+//var downReleased;
+//var leftHeld = "FALSE";
+//var leftReleased;
+//var rightHeld;
+//var rightReleased;
+//var spaceHeld;
+//var spaceReleased;
 
-var upHeld;
-var upReleased;
-var downHeld;
-var downReleased;
-var leftHeld;
-var leftReleased;
-var rightHeld;
-var rightReleased;
-var fireHeld;
-var fireReleased;
-
-function InputController(object, options){
-    input = new Input(object);
-    this._node = object;
-    this._id = object.addComponent(this);
+function InputController(node){
+    // Get a copy of node
+    this.node = node;
+    // Add InputController to node
+    this.id = node.addComponent(this);
+    // Initialize inputs
+    this.upHeld = false;
+    this.upReleased = false;
+    this.downHeld = false;
+    this.downReleased = false;
+    this.leftHeld = false;
+    this.leftReleased = false;
+    this.rightHeld = false;
+    this.rightReleased = false;
+    this.spaceHeld = false;
+    this.spaceReleased = false;
+    
+    new Input(this.node);
 }
 
 InputController.prototype.onReceive = function(type, event){
@@ -28,7 +39,7 @@ InputController.prototype.onReceive = function(type, event){
     } else {
         console.log("InputController::Received input that was not handled");   
     }
-}
+};
 
 InputController.prototype.keyPressed = function(key){
     switch (key){
@@ -57,15 +68,15 @@ InputController.prototype.keyPressed = function(key){
             }
             break;
         case 'SPACE':
-            if(!this.fireHeld){ 
-                this.fireHeld = true;
-                this.fireReleased = false;
+            if(!this.spaceHeld){ 
+                this.spaceHeld = true;
+                this.spaceReleased = false;
             }
             break;
         default:
             return;
     }
-}
+};
 
 InputController.prototype.keyReleased = function(key){
     switch (key){
@@ -94,14 +105,14 @@ InputController.prototype.keyReleased = function(key){
             }
             break;
         case 'SPACE':
-            if(!this.fireReleased){ 
-                this.fireReleased = true;
-                this.fireHeld = false;
+            if(!this.spaceReleased){ 
+                this.spaceReleased = true;
+                this.spaceHeld = false;
             }
             break;
         default:
             return;
     }
-}
+};
 
 module.exports = InputController;

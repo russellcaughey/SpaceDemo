@@ -1,26 +1,59 @@
-var _controller;
-
-function Input(controller){
-    _controller = controller;
-    document.addEventListener('keydown', this.onKeyDown, false);
-    document.addEventListener('keyup', this.onKeyUp, false);
+function Input(node){
+    // Store a reference to the node
+    this.node = node;
+    // Add the component and store its path
+    this.id = node.addComponent(this);
+    // Event listener for key down
+    document.addEventListener('keydown', function(){ onKeyDown(event,node); 
+    }, false);
+    // Event listener for key up
+    document.addEventListener('keyup', function(){ onKeyUp(event,node);
+    }, false);
+    // Request update on this node
+    this.node.requestUpdate(this.id);
 }
 
-Input.prototype.onKeyDown = function(event) {
+var onKeyDown = function(event, node){
     for(var value in KEYS){
         if(event.which == KEYS[value]){
-            _controller.emit('keydown', value);
+            node.emit('keydown', value);
         }
     }
 }
 
-Input.prototype.onKeyUp = function(event) {
+var onKeyUp = function(event, node){
     for(var value in KEYS){
         if(event.which == KEYS[value]){
-            _controller.emit('keyup', value);
+            node.emit('keyup', value);
         }
     }
 }
+
+//Input.prototype.onKeyDown = function(event, node) {
+//    console.log("Test in Input::KEYDOWN::"+this.node);
+//    for(var value in KEYS){
+//        if(event.which == KEYS[value]){
+//            this.node.emit('keydown', value);
+//        }
+//    }
+//};
+//
+//Input.prototype.onKeyUp = function(event) {
+//    console.log("Test in Input::KEYUP::"+this.node);
+//    for(var value in KEYS){
+//        if(event.which == KEYS[value]){
+//            this.node.emit('keyup', value);
+//        }
+//    }
+//};
+
+//Input.prototype = Object.create(Node.prototype);
+//Input.prototype.constructor = Node;
+
+//Input.prototype.onUpdate = function onUpdate(time){
+//    console.log("Test in Input::"+this.node);
+//    this.node.requestUpdateOnNextTick(this.id);
+//};
 
 var KEYS = {
     BACKSPACE: 8,

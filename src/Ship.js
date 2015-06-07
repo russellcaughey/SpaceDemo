@@ -8,7 +8,7 @@ var Color = require('famous/utilities/Color');
 var Position = require('famous/components/Position');
 var ShipController = require('./ShipController');
 
-var ship = new Node();
+var ship;// = new Node();
 var shipMesh;
 var controller;
 var position;
@@ -16,7 +16,8 @@ var isInit = false;
 
 var clock = FamousEngine.getClock();
 
-function Ship(scene, options){
+function Ship(node, options){
+    this._id = node.addComponent(this);
     // Load ship object
     OBJLoader.load('obj/ship_v2.obj', function(geometries){
         var buffers = geometries[0];
@@ -30,7 +31,9 @@ function Ship(scene, options){
         });
         
         // Create ship node
-        ship = scene.addChild(); 
+        ship = node.addChild(); 
+        // Add ship component to node
+        ship.addComponent(this);
         // Add geometry to ship
         shipMesh = new Mesh(ship)
             .setGeometry(geometry)
@@ -38,18 +41,19 @@ function Ship(scene, options){
         // Set up ships properties
         ship
             .setOrigin(0.5, 0.5, 0.5)
-            .setAlign(0.5, 0.9, 0.5)
+            .setAlign(0, 0.9, 0)
             .setMountPoint(0.5, 0.5, 0.5)
             .setSizeMode(1, 1, 1)
             .setAbsoluteSize(30, 30, 30)
-            .setRotation(-0.5,3,0);
+            .setRotation(-0.5,3,0)
+            .setPosition(window.innerWidth/2, 0.9, 0.5);
         
         this._id = ship.getLocation();
         this._node = ship;
         ship.tagName = 'ship';
         
-        // Add ship controller
-        controller = new ShipController(ship);
+       // Create ship controller
+        new ShipController(ship);
     });
     
     isInit = true;

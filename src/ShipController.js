@@ -1,95 +1,115 @@
-// Ship Input
-var FamousEngine = require('famous/core/FamousEngine');
-var Node = require('famous/core/Node');
 var Position = require('famous/components/Position');
 var InputController = require('./InputController');
 
-var _ship;
-var _input;
-var position;
-var currentXPos;
-var currentRotation = 0;
+var moveSpeed = 10;
+var boundsOffset = 100;
+var bounds = [boundsOffset,window.innerWidth-boundsOffset];
 var bankSpeed = 0.1;
 var stabilizingSpeed = 0.3;
-var stable = true;
 var maxBank = 0.7;
-var clock = FamousEngine.getClock();
 
-function ShipController(ship, option){ 
-    _ship = ship;
-    _input = new InputController(ship);
-    position = new Position(_ship);
-    currentXPos = position.getX();
-    this._node = ship;
-    this._id = ship.addComponent(this);
+function ShipController(node, option){ 
+    // Set this tag name
     this.tagName = 'ShipController';
-    return this;
+    // Get a reference to the node
+    this.node = node;
+    // Add component to node and store it's location
+    this.id = node.addComponent(this);
+    // Add and input component to this node
+    this.input = new InputController(this.node);
+    // Add position component to this node
+    this.position = new Position(this.node);
+    // Store a reference to this nodes starting x position
+    this.currentXPos = this.position.getX(this.node);
+    // Initialize rotation to zero
+    this.currentRotation = 0;
+    // Initialize stable to true
+    this.isStable = true;
+    // Request update on this node
+    this.node.requestUpdate(this.id);
 }
 
+// Move the ship to the left
 ShipController.prototype.moveLeft = function(){
-    
-}
-
-ShipController.prototype.moveRight = function(){
-    
-}
-
-ShipController.prototype.fire = function(){
-   
-}
-
-ShipController.prototype.onSizeChange = function(size){
-    console.log("ShipController::On size changed");
-}
-
-ShipController.prototype.onParentSizeChange = function(size){
-    console.log("ShipController::Parent size changed");
-}
-
-//  Ship update
-FamousEngine.getClock().setInterval(function() { 
+    // No longer stable
+    this.isStable = false;
     
     // Bank left
-    if(_input.leftHeld){
-        stable = false;
-        if(currentRotation < maxBank){
-            currentRotation += bankSpeed;
-            _ship.setRotation(-0.5, 3, currentRotation);
-        }
-        currentXPos -= 10;
-        position.set(currentXPos,0,0);
+    if(this.currentRotation < maxBank){
+        this.currentRotation += bankSpeed;
+        this.node.setRotation(-0.5, 3, this.currentRotation);
     }
-    // Stabilize
-    else if(currentRotation > 0 && !stable){
-        currentRotation -= stabilizingSpeed;
-        if(currentRotation < 0) stable = true;
-        _ship.setRotation(-0.5, 3, currentRotation);
+    
+    // Move left if within the bounds
+    if(this.currentXPos > bounds[0]){
+        this.currentXPos -= moveSpeed;
+        this.position.set(this.currentXPos,0,0);
     }
+};
+
+// Move the ship to the right
+ShipController.prototype.moveRight = function(){
+    // No longer stable
+    this.isStable = false;
     
     // Bank right
-    if(_input.rightHeld){
-        stable = false;
-        if(currentRotation > -maxBank){
-            currentRotation -= bankSpeed;
-            _ship.setRotation(-0.5, 3, currentRotation);
-        }
-        currentXPos += 10;
-        position.set(currentXPos,0,0);
-    }
-    // Stabilize
-    else if(currentRotation < 0 && !stable){
-        currentRotation += stabilizingSpeed;   
-        if(currentRotation > 0) stable = true;
-        _ship.setRotation(-0.5, 3, currentRotation);
+    if(this.currentRotation > -maxBank){
+        this.currentRotation -= bankSpeed;
+        this.node.setRotation(-0.5, 3, this.currentRotation);
     }
     
-    if(_input.fireHeld){
-        
+    // Move right
+    if(this.currentXPos < bounds[1]){
+        this.currentXPos += moveSpeed;
+        this.position.set(this.currentXPos,0,0);
     }
-}, 8);
+};
 
-ShipController.prototype.onReceive = function(type, event){
+// Stabilize the ship
+ShipController.prototype.stabilize = function(){
+    if(this.currentRotation > 0){
+        this.currentRotation -= stabilizingSpeed;
+        if(this.currentRotation < 0) this.isStable = true;
+        this.node.setRotation(-0.5, 3, this.currentRotation);
+    }
+    
+    else if(this.currentRotation < 0){
+        this.currentRotation += stabilizingSpeed;
+        if(this.currentRotation > 0) this.isStable = true;
+        this.node.setRotation(-0.5, 3, this.currentRotation);
+    }
+};
 
-}
+// Fire!
+ShipController.prototype.fire = function(){
+   console.log("Fire!");
+};
+
+// Set the boundaries the ship can move within
+ShipController.prototype.setBounds = function(size){
+    bounds = [boundsOffset, size-boundsOffset];
+};
+
+// Update ship controller
+ShipController.prototype.onUpdate = function onUpdate(time){
+    // Bank left
+    if(this.input.leftHeld){
+        this.moveLeft();
+    }
+    // Stabilize
+    else if(!this.isStable && this.currentRotation > 0){
+        this.stabilize();
+    }
+    
+    if(this.input.rightHeld){
+        this.moveRight();
+    }
+    // Stabilize
+    else if(!this.isStable && this.currentRotation < 0){
+        this.stabilize();
+    }
+    // Request update
+    this.node.requestUpdateOnNextTick(this.id);
+};
 
 module.exports = ShipController;
