@@ -11,5 +11,3 @@ var scene = FamousEngine.createScene('body');
 
 // Create new game
 var game = new Game(scene);
-
-FamousEngine.requestUpdate(game);  
