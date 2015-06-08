@@ -37,7 +37,7 @@ ShipController.prototype.moveLeft = function(){
     // Bank left
     if(this.currentRotation < maxBank){
         this.currentRotation += bankSpeed;
-        this.node.setRotation(-0.5, 3, this.currentRotation);
+        this.node.setRotation(-0.5, 3.17, this.currentRotation);
     }
     
     // Move left if within the bounds
@@ -55,7 +55,7 @@ ShipController.prototype.moveRight = function(){
     // Bank right
     if(this.currentRotation > -maxBank){
         this.currentRotation -= bankSpeed;
-        this.node.setRotation(-0.5, 3, this.currentRotation);
+        this.node.setRotation(-0.5, 3.17, this.currentRotation);
     }
     
     // Move right
@@ -69,15 +69,21 @@ ShipController.prototype.moveRight = function(){
 ShipController.prototype.stabilize = function(){
     if(this.currentRotation > 0){
         this.currentRotation -= stabilizingSpeed;
-        if(this.currentRotation < 0) this.isStable = true;
-        this.node.setRotation(-0.5, 3, this.currentRotation);
-    }
+        this.node.setRotation(-0.5, 3.17, this.currentRotation);
+        if(this.currentRotation < 0){
+            this.isStable = true;
+            this.node.setRotation(-0.5, 3.17, 0);
+        }
+    }                   
     
     else if(this.currentRotation < 0){
         this.currentRotation += stabilizingSpeed;
-        if(this.currentRotation > 0) this.isStable = true;
-        this.node.setRotation(-0.5, 3, this.currentRotation);
-    }
+        this.node.setRotation(-0.5, 3.17, this.currentRotation);
+        if(this.currentRotation > 0){ 
+            this.isStable = true;
+            this.node.setRotation(-0.5, 3.17, 0);
+        }
+    } 
 };
 
 // Fire!
@@ -92,7 +98,7 @@ ShipController.prototype.setBounds = function(size){
 
 // Update ship controller
 ShipController.prototype.onUpdate = function onUpdate(time){
-    // Bank left
+    // Move left
     if(this.input.leftHeld){
         this.moveLeft();
     }
@@ -100,7 +106,7 @@ ShipController.prototype.onUpdate = function onUpdate(time){
     else if(!this.isStable && this.currentRotation > 0){
         this.stabilize();
     }
-    
+    // Move right
     if(this.input.rightHeld){
         this.moveRight();
     }
