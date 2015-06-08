@@ -16,7 +16,7 @@ function InputController(node){
     this.rightReleased = false;
     this.spaceHeld = false;
     this.spaceReleased = false;
-    
+    // New input of this node
     new Input(this.node);
 }
 
@@ -32,25 +32,25 @@ InputController.prototype.onReceive = function(type, event){
 
 InputController.prototype.keyPressed = function(key){
     switch (key){
-        case 'UP':
+        case 'UP_ARROW':
             if(!this.upHeld){ 
                 this.upHeld = true;
                 this.upReleased = false;
             }
             break;
-        case 'DOWN':
+        case 'DOWN_ARROW':
             if(!this.downHeld){ 
                 this.downHeld = true;
                 this.downReleased = false;
             }
             break;
-        case 'LEFT':
+        case 'LEFT_ARROW':
             if(!this.leftHeld){ 
                 this.leftHeld = true;
                 this.leftReleased = false;
             }
-        break;
-        case 'RIGHT':
+            break;
+        case 'RIGHT_ARROW':
             if(!this.rightHeld){ 
                 this.rightHeld = true;
                 this.rightReleased = false;
@@ -69,25 +69,25 @@ InputController.prototype.keyPressed = function(key){
 
 InputController.prototype.keyReleased = function(key){
     switch (key){
-        case 'UP':
+        case 'UP_ARROW':
             if(!this.upReleased){ 
                 this.upHeld = false;
                 this.upReleased = true;
             }
             break;
-        case 'DOWN':
+        case 'DOWN_ARROW':
             if(!this.downReleased){ 
                 this.downHeld = false;
                 this.downReleased = true;
             }
             break;
-        case 'LEFT':
+        case 'LEFT_ARROW':
             if(!this.leftReleased){ 
                 this.leftHeld = false;
                 this.leftReleased = true;
             }
         break;
-        case 'RIGHT':
+        case 'RIGHT_ARROW':
             if(!this.rightReleased){ 
                 this.rightHeld = false;
                 this.rightReleased = true;
