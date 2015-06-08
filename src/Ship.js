@@ -8,16 +8,10 @@ var Color = require('famous/utilities/Color');
 var Position = require('famous/components/Position');
 var ShipController = require('./ShipController');
 
-var ship;// = new Node();
-var shipMesh;
-var controller;
-var position;
-var isInit = false;
+var _ship = new Node();
+var _shipMesh;
 
-var clock = FamousEngine.getClock();
-
-function Ship(node, options){
-    this._id = node.addComponent(this);
+function Ship(node){
     // Load ship object
     OBJLoader.load('obj/ship_v2.obj', function(geometries){
         var buffers = geometries[0];
@@ -31,45 +25,37 @@ function Ship(node, options){
         });
         
         // Create ship node
-        ship = node.addChild(); 
+        _ship = node.addChild(); 
+        // Add ship tag
+        _ship.tagName = 'ship';
         // Add ship component to node
-        ship.addComponent(this);
+        _ship.id = _ship.addComponent(this);
         // Add geometry to ship
-        shipMesh = new Mesh(ship)
+        _shipMesh = new Mesh(_ship)
             .setGeometry(geometry)
             .setBaseColor(new Color('silver'));
         // Set up ships properties
-        ship
+        _ship
             .setOrigin(0.5, 0.5, 0.5)
             .setAlign(0, 0.9, 0)
             .setMountPoint(0.5, 0.5, 0.5)
             .setSizeMode(1, 1, 1)
             .setAbsoluteSize(30, 30, 30)
-            .setRotation(-0.5,3,0)
+            .setRotation(-0.5,3.17,0)
             .setPosition(window.innerWidth/2, 0.9, 0.5);
-        
-        this._id = ship.getLocation();
-        this._node = ship;
-        ship.tagName = 'ship';
-        
-       // Create ship controller
-        new ShipController(ship);
+
+        // Create ship controller
+        new ShipController(_ship);
     });
+}
+
+Ship.prototype.onReceive = function(type, event){
     
-    isInit = true;
-}
+};
 
-Ship.prototype.isAlive = function(){
-    console.log("Ship still kickin'!");   
-}
-
-Ship.prototype.onReceive = function(type, ev){
-    console.log("Received an event in Ship");
-}
-
-//  Ship update
-FamousEngine.getClock().setInterval(function() { var time = clock.getTime();
-
-}, 16);
+Ship.prototype.onUpdate = function onUpdate(){
+    
+//    _ship.requestUpdateOnNextTick(_ship.id);
+};
 
 module.exports = Ship;
