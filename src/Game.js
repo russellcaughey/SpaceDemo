@@ -20,20 +20,12 @@ var _node;
 function Game(scene){
     this._node = scene;
     scene.tagName = GameName;
-    // Add a camera component to the scene
-    var camera = new Camera(scene)
-        .setDepth(800);
-    
+
     // Create first level
     levels[0] = new Level(scene);
 
     // Create ship
     var ship = new Ship(scene);
-    
-    // Updates
-    FamousEngine.requestUpdate(levels[0]);  
-    FamousEngine.requestUpdate(ship);   
-
 }
 
 Game.prototype.onReceive = function(type, payload){
