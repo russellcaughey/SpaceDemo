@@ -17,16 +17,16 @@ var numLevels = 1;
 var levels = [numLevels];
 var showStats = true;
 
-var _node;
 
-function Game(scene){
-    this._node = scene;
-    scene.tagName = GameName;
+function Game(sceneNode){
+    this.node = scene;
+    this.tagName = 'Game';
+//    scene.tagName = GameName;
     // Create first level
-    levels[0] = new Level(scene);
+    levels[0] = new Level(sceneNode);
 
     // Create ship
-    var ship = new Ship(scene);
+    var ship = new Ship(sceneNode);
 }
 
 if(showStats){
