@@ -21,26 +21,25 @@ var isInit = false;
 
 // Astroid field
 function AstroidField(node){
-    this.id = node.addComponent(this);
+    this.node= node.addChild();
+    this.id = this.node.addComponent(this);
     this.node = node;
-    scene = node;
-    astroidField = scene.addChild();
-    initAstroidField();
-    FamousEngine.requestUpdate(this);
+    this.init();
+    this.node.requestUpdate(this);
 }
 
 //  Initialize astroid field
-function initAstroidField(){
+AstroidField.prototype.init = function(){
     for (var i = 0; i < numAstroids; i++){
-        createAstroid();
+        this.createAstroid();
     }
     isInit = true;   
 }
 
 // Create a new astroid
-function createAstroid(){
+AstroidField.prototype.createAstroid = function(){
     // Add astroid to scene
-    var astroid = astroidField.addChild();
+    var astroid = this.node.addChild();
     // Add position component
     var position = new Position(astroid);
     // If the astroid field has already been initialized, create new astroids off screen
@@ -68,16 +67,19 @@ function createAstroid(){
         .setAlign(Math.random(), 0)
         // Set the translational origin to the bottom center of the 'node'
         .setMountPoint(0.5, 1)
-
+    
+    //Memory leak in here
     var setPosition = function(){
-        startX = Math.random();
+//        startX = Math.random();
         startY = yUpperBounds;
         // Set start position (using duration of 0 moves astroid back instantly)
         position.set(startX, startY, 0, {duration: 0});
         // Set end position 
         position.setY(yLowBounds, {duration:Math.random() * 10000}, setPosition);
     }
-    setPosition();
+    if(!isInit) {
+        setPosition();
+    }
 }
 
 // Random integer, could not find this wrapper in new mixed-mode
