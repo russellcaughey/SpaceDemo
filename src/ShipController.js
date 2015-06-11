@@ -1,5 +1,13 @@
 var Position = require('famous/components/Position');
+var Mesh = require('famous/webgl-renderables/Mesh');
+var Box = require('famous/webgl-geometries/primitives/Box');
+var Particle = require('famous/physics/bodies/Particle');
+var Material = require('famous/webgl-materials/Material');
+var Color = require('famous/utilities/Color');
+var Vector3 = require('famous/math/Vec3');
+var Node = require('famous/core/Node');
 var InputController = require('./InputController');
+var Shot = require('./Shot');
 
 var moveSpeed = 10;
 var boundsOffset = 100;
@@ -8,7 +16,7 @@ var bankSpeed = 0.1;
 var stabilizingSpeed = 0.3;
 var maxBank = 0.7;
 
-function ShipController(node, option){ 
+function ShipController(node){ 
     // Set this tag name
     this.tagName = 'ShipController';
     // Get a reference to the node
@@ -74,7 +82,7 @@ ShipController.prototype.stabilize = function(){
             this.isStable = true;
             this.node.setRotation(-0.5, 3.17, 0);
         }
-    }                   
+    }
     
     else if(this.currentRotation < 0){
         this.currentRotation += stabilizingSpeed;
@@ -83,12 +91,79 @@ ShipController.prototype.stabilize = function(){
             this.isStable = true;
             this.node.setRotation(-0.5, 3.17, 0);
         }
-    } 
+    }
 };
 
 // Fire!
 ShipController.prototype.fire = function(){
-   console.log("Fire!");
+   
+    if (Date.now() - this.lastShot < 500) return;
+    this.lastShot = Date.now();
+    
+    new Shot(this.node, 'laser');
+//    new Shot(this.node, 'particle');
+//    new Shot(this.node, 'particle');
+    
+//    var laserNode = new Node();
+//      
+//    console.log("Laser: " + laserNode + " IsShown: " + laserNode.isShown() + " Opacity: " + laserNode.getOpacity() + " Align: " + laserNode.getAlign().toString());
+//    
+//    laserNode.setAlign(9,1,1);
+////    var test = [8,6,7,5,3,0,9];
+////    for(var value in laserNode.getAlign()){
+//    
+////    console.log(test.toString());
+//    
+////    for(var value in laserNode.getAlign()){
+////        console.log(value.toString());   
+////    }
+//
+//    var laser = new Mesh(this.node)
+//        .setGeometry(new Box(0, 0, 0))
+//        .setBaseColor(new Color('red'));
+//        .setSizeMode(a
+//        .setPosition(100,200,0);
+    
+//    var Transitionable = require('famous/transitions/Transitionable');
+//    var myValue = new Transitionable(0);
+//    myValue.set(100, { duration: 30000 });
+//    
+//    this.node
+//        .setSizeMode('absolute', 'absolute')
+//        .setAbsoluteSize(5,100,5)
+//        .setPosition(500, 500, 0);
+    
+//    console.log("Last euler x: " + this.node._lastEulerX);
+    
+//        laser.rotateY(Math.PI / 2);
+    
+//        laser.position.set(
+//            this.currentXPos, 0.5, 0.5
+//            (Math.random() * otherObject.radius * 2) - otherObject.radius,
+//            (Math.random() * otherObject.radius * 2) - otherObject.radius,
+//            ((Math.random() * 10) - 20) + this.radius
+//        );
+
+//        this.group.add(laser);
+
+//        var group = this.group;
+
+//    $.animate({
+//            duration: 1000,
+//            onUpdate() {
+//                var travelZVector = new THREE.Vector3(
+//                    0,
+//                    0,
+//                    5
+//                );
+
+//                laser.position.add(travelZVector);
+//            },
+//        onFinish() {
+//        group.remove(laser);1
+//      }
+//    });
+//  }    
 };
 
 // Set the boundaries the ship can move within
@@ -96,8 +171,11 @@ ShipController.prototype.setBounds = function(size){
     bounds = [boundsOffset, size-boundsOffset];
 };
 
+
+
 // Update ship controller
 ShipController.prototype.onUpdate = function onUpdate(time){
+    
     // Move left
     if(this.input.leftHeld){
         this.moveLeft();
@@ -114,6 +192,11 @@ ShipController.prototype.onUpdate = function onUpdate(time){
     else if(!this.isStable && this.currentRotation < 0){
         this.stabilize();
     }
+    // Fire lasers
+    if(this.input.spaceHeld){
+        this.fire();   
+    }
+    
     // Request update
     this.node.requestUpdateOnNextTick(this.id);
 };
