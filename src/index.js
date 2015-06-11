@@ -7,7 +7,7 @@ var Game = require('./Game');
 FamousEngine.init();
 
 // Create scene
-var scene = FamousEngine.createScene('body');
+var sceneNode = FamousEngine.createScene('body');
 
 // Create new game
-var game = new Game(scene);
+var game = new Game(sceneNode);

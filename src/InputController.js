@@ -5,6 +5,7 @@ function InputController(node){
     this.node = node;
     // Add InputController to node
     this.id = node.addComponent(this);
+    this.tagName = 'InputController';
     // Initialize inputs
     this.upHeld = false;
     this.upReleased = false;
@@ -16,7 +17,7 @@ function InputController(node){
     this.rightReleased = false;
     this.spaceHeld = false;
     this.spaceReleased = false;
-    // New input of this node
+    // New input for this node
     new Input(this.node);
 }
 

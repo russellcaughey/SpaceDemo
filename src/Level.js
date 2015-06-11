@@ -28,7 +28,7 @@ Level.prototype.init = function() {
         .setColor(new Color('white'));
     
     // Create an astroid field
-    var astroidField = new AstroidField(this.node);
+    this.astroidField = new AstroidField(this.node);
     
     this.isInit = true;
     

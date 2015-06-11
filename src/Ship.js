@@ -8,9 +8,6 @@ var Color = require('famous/utilities/Color');
 var Position = require('famous/components/Position');
 var ShipController = require('./ShipController');
 
-var _ship = new Node();
-var _shipMesh;
-
 function Ship(node){
     // Load ship object
     OBJLoader.load('obj/ship_v2.obj', function(geometries){
@@ -25,17 +22,17 @@ function Ship(node){
         });
         
         // Create ship node
-        _ship = node.addChild(); 
+        this.shipNode = node.addChild(); 
         // Add ship tag
-        _ship.tagName = 'ship';
+        this.shipNode.tagName = 'ship';
         // Add ship component to node
-        _ship.id = _ship.addComponent(this);
-        // Add geometry to ship
-        _shipMesh = new Mesh(_ship)
+        this.shipNode.id = this.shipNode.addComponent(this);
+        // Add mesh and geometry to ship
+        this.mesh = new Mesh(this.shipNode)
             .setGeometry(geometry)
             .setBaseColor(new Color('silver'));
         // Set up ships properties
-        _ship
+        this.shipNode
             .setOrigin(0.5, 0.5, 0.5)
             .setAlign(0, 0.9, 0)
             .setMountPoint(0.5, 0.5, 0.5)
@@ -45,17 +42,21 @@ function Ship(node){
             .setPosition(window.innerWidth/2, 0.9, 0.5);
 
         // Create ship controller
-        new ShipController(_ship);
+        new ShipController(this.shipNode);
     });
 }
 
-Ship.prototype.onReceive = function(type, event){
-    
+Ship.prototype.onParentDismount = function(){
+    console.log("Shot let loose!");
 };
+
+
+//Ship.prototype.onReceive = function(type, event){
+//    
+//};
 
 Ship.prototype.onUpdate = function onUpdate(){
     
-//    _ship.requestUpdateOnNextTick(_ship.id);
 };
 
 module.exports = Ship;

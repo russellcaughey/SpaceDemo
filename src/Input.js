@@ -15,20 +15,22 @@ function Input(node){
 
 // Key event
 var onKeyEvent = function(event, node){
-    if(event.type == 'keydown'){
-        for(var value in KeyCodes){
-            if(event.which == KeyCodes[value]){
-                node.emit('keydown', value);
+    
+        if(event.type == 'keydown'){
+            for(var value in KeyCodes){
+                if(event.which == KeyCodes[value]){
+                    node.emit('keydown', value);
+                }
             }
         }
-    }
-    else if(event.type == 'keyup'){
-        for(var value in KeyCodes){
-            if(event.which == KeyCodes[value]){
-                node.emit('keyup', value);
+        else if(event.type == 'keyup'){
+            for(var value in KeyCodes){
+                if(event.which == KeyCodes[value]){
+                    node.emit('keyup', value);
+                }
             }
         }
-    }
+
 }
 
 module.exports = Input;
