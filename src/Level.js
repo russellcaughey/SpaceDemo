@@ -12,7 +12,14 @@ var windowSizeX = window.innerWidth;
 var windowSizeY = window.innerHeight;
 
 function Level(node){
-    this.node = node.addChild();
+    // Create Level node
+    this.node = node;
+//    this.node = node.addChild();
+    // Add this component to the node
+    this.id = this.node.addComponent(this); //TODO: need?
+    // Set the tag name
+    this.node.tagName = "Level";
+    // Initialize the node
     this.init();
 }
 
@@ -27,8 +34,10 @@ Level.prototype.init = function() {
     var light = new PointLight(lightNode)
         .setColor(new Color('white'));
     
+    
     // Create an astroid field
-    this.astroidField = new AstroidField(this.node);
+    this.astroidField = this.node.addChild();
+    this.astroidField.addComponent(new AstroidField(this.node));
     
     this.isInit = true;
     

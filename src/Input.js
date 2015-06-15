@@ -3,6 +3,7 @@ var KeyCodes = require('famous/utilities/KeyCodes');
 function Input(node){
     // Store a reference to the node
     this.node = node;
+    
     // Add the component and store its path
     this.id = node.addComponent(this);
     // Event listener for key down
@@ -15,7 +16,6 @@ function Input(node){
 
 // Key event
 var onKeyEvent = function(event, node){
-    
         if(event.type == 'keydown'){
             for(var value in KeyCodes){
                 if(event.which == KeyCodes[value]){
@@ -30,7 +30,6 @@ var onKeyEvent = function(event, node){
                 }
             }
         }
-
 }
 
 module.exports = Input;

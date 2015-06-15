@@ -22,9 +22,9 @@ function Ship(node){
         });
         
         // Create ship node
-        this.shipNode = node.addChild(); 
+        this.shipNode = node;
         // Add ship tag
-        this.shipNode.tagName = 'ship';
+        this.shipNode.tagName = 'Ship';
         // Add ship component to node
         this.shipNode.id = this.shipNode.addComponent(this);
         // Add mesh and geometry to ship
@@ -41,8 +41,8 @@ function Ship(node){
             .setRotation(-0.5,3.17,0)
             .setPosition(window.innerWidth/2, 0.9, 0.5);
 
-        // Create ship controller
-        new ShipController(this.shipNode);
+        // Add ship controller
+        this.shipNode.addComponent(new ShipController(this.shipNode));
     });
 }
 

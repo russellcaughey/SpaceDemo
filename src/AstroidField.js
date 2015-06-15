@@ -21,11 +21,11 @@ var isInit = false;
 
 // Astroid field
 function AstroidField(node){
-    this.node= node.addChild();
+    this.node= node;
+    this.node.tagName = "AstroidField";
     this.id = this.node.addComponent(this);
-    this.node = node;
     this.init();
-    this.node.requestUpdate(this);
+    this.node.requestUpdate(this.id);
 }
 
 //  Initialize astroid field

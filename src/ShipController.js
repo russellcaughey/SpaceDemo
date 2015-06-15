@@ -19,16 +19,16 @@ var maxBank = 0.7;
 function ShipController(node){ 
     // Set this tag name
     this.tagName = 'ShipController';
-    // Get a reference to the node
+    // Get a reference to the ship's node
     this.node = node;
     // Add component to node and store it's location
-    this.id = node.addComponent(this);
+    this.id = this.node.addComponent(this);
     // Add and input component to this node
-    this.input = new InputController(this.node);
+    this.node.input = new InputController(this.node);
     // Add position component to this node
-    this.position = new Position(this.node);
+    this.node.position = new Position(this.node);
     // Store a reference to this nodes starting x position
-    this.currentXPos = this.position.getX(this.node);
+    this.currentXPos = this.node.position.getX(this.node);
     // Initialize rotation to zero
     this.currentRotation = 0;
     // Initialize stable to true
@@ -51,7 +51,7 @@ ShipController.prototype.moveLeft = function(){
     // Move left if within the bounds
     if(this.currentXPos > bounds[0]){
         this.currentXPos -= moveSpeed;
-        this.position.set(this.currentXPos,0,0);
+        this.node.position.set(this.currentXPos,0,0);
     }
 };
 
@@ -69,7 +69,7 @@ ShipController.prototype.moveRight = function(){
     // Move right
     if(this.currentXPos < bounds[1]){
         this.currentXPos += moveSpeed;
-        this.position.set(this.currentXPos,0,0);
+        this.node.position.set(this.currentXPos,0,0);
     }
 };
 
@@ -177,7 +177,7 @@ ShipController.prototype.setBounds = function(size){
 ShipController.prototype.onUpdate = function onUpdate(time){
     
     // Move left
-    if(this.input.leftHeld){
+    if(this.node.input.leftHeld){
         this.moveLeft();
     }
     // Stabilize
@@ -185,7 +185,7 @@ ShipController.prototype.onUpdate = function onUpdate(time){
         this.stabilize();
     }
     // Move right
-    if(this.input.rightHeld){
+    if(this.node.input.rightHeld){
         this.moveRight();
     }
     // Stabilize
@@ -193,7 +193,7 @@ ShipController.prototype.onUpdate = function onUpdate(time){
         this.stabilize();
     }
     // Fire lasers
-    if(this.input.spaceHeld){
+    if(this.node.input.spaceHeld){
         this.fire();   
     }
     

@@ -19,16 +19,17 @@ var showStats = true;
 
 
 function Game(sceneNode){
-    this.node = scene;
-    this.tagName = 'Game';
-//    scene.tagName = GameName;
+    this.node = sceneNode;
+    this.node.tagName = 'Game';
     // Create first level
-    levels[0] = new Level(sceneNode);
-
+    levels[0] = this.node.addChild();
+    levels[0].addComponent(new Level(levels[0]));
     // Create ship
-    var ship = new Ship(sceneNode);
+    var player = this.node.addChild();
+    player.addComponent(new Ship(player));
 }
 
+// Game statistics (fps)
 if(showStats){
     var stats, update;
     stats = new Stats;
